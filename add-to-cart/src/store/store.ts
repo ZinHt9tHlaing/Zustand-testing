@@ -6,12 +6,20 @@ type CartStore = {
   cart: CartItem[];
 };
 
+type Action = {
+  addToCart: (product: CartItem) => void;
+  clearCart: () => void;
+};
+
 const initialState: CartStore = {
   cart: [],
 };
 
-export const useCartStore = create<CartStore>()(
-  immer(() => ({
+export const useCartStore = create<CartStore & Action>()(
+  immer((set) => ({
     ...initialState,
+    addToCart: (product) =>
+      set((state) => ({ cart: [...state.cart, product] })),
+    clearCart: () => set(initialState),
   })),
 );
